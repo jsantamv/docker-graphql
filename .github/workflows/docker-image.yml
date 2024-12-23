@@ -19,12 +19,12 @@ jobs:
         fetch-depth: 0
 
     - name: Git Semantin Version
-      id: semver
-      uses: paulhatch/semantic-version@v4.0.2
+      uses: PaulHatch/semantic-version@v4.0.2
       with:
        major_pattern: 'major:'
        minor_pattern: 'feat:'
        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
     - name: Docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
