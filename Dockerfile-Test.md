@@ -9,5 +9,3 @@ Carga la imagen localmente usando --load:
 # Luego probarlo
 
 `docker container run -p 3000:3000 jsantamv/docker-graphql:1.0.0`
-
-
