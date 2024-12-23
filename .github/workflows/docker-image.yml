@@ -3,13 +3,14 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'Dockerfile'
+      - 'src/**'
   pull_request:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +26,7 @@ jobs:
         minor_pattern: 'feat:'
         patch_pattern: 'fix:'
         no_bump_pattern: 'docs:|chore:|refactor:'
-        format: "${major}.${minor}.${patch}${{ increment && '-rc.' || '' }}${increment}"
+        format: "${major}.${minor}.${patch}${{ steps.version.outputs.increment != '' && '-rc.' || '' }}${{ steps.version.outputs.increment }}"
         tag_prefix: "v"
       id: version
       
@@ -34,22 +35,15 @@ jobs:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         NEW_VERSION: ${{ steps.version.outputs.version }}
-      run: |        
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD        
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD --password-stdin        
 
     - name: Build the Docker image
-      env:      
-        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker build -t jsantamv/docker-graphql:$NEW_VERSION .
         docker build -t jsantamv/docker-graphql:latest .
 
     - name: Push the Docker image
-      env:
-        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker push jsantamv/docker-graphql:$NEW_VERSION
         docker push jsantamv/docker-graphql:latest
-    
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
