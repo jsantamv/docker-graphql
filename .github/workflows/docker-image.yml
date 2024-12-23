@@ -25,7 +25,7 @@ jobs:
         minor_pattern: 'feat:'
         patch_pattern: 'fix:'
         no_bump_pattern: 'docs:|chore:|refactor:'
-        format: "${major}.${minor}.${patch}${increment:+-rc.${increment}}"
+        format: "${major}.${minor}.${patch}${{ increment && '-rc.' || '' }}${increment}"
         tag_prefix: "v"
       id: version
       
@@ -38,7 +38,7 @@ jobs:
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD        
 
     - name: Build the Docker image
-      env:
+      env:      
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker build -t jsantamv/docker-graphql:$NEW_VERSION .
