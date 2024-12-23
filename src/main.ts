@@ -12,8 +12,8 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(3000);
-  
+  console.log('APLICACIÓN INICIANDO...');
+  await app.listen(3000);  
   console.log('APLICACIÓN CORRIENDO EN PUERTO: ', 3000 );
 }
 bootstrap();
