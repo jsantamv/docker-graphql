@@ -26,10 +26,12 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build -t jsantamv/docker-graphql:1.0.1 .
+        docker build -t jsantamv/docker-graphql:latest .
 
     - name: Push the Docker image
       run: |
         docker push jsantamv/docker-graphql:1.0.1
+        docker push jsantamv/docker-graphql:latest
     
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
